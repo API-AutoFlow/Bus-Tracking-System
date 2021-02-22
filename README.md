@@ -30,8 +30,5 @@ Summary
             - Files
             - Flows
             - integration with Slack Webhook
-        
-        for more information about Slack integration you can visit:
-            https://www.youtube.com/watch?v=4td1AYNv9HI&t=315s
-            https://github.com/API-AutoFlow/slack-webhook
+ 
             
