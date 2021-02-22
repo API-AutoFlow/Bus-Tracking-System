@@ -1,7 +1,7 @@
 # transportation-postgres
 Summary
 
-    This is a solution to manage a transportation system.
+    This is a use case for transportation system.
     Postgres is used to manage database. 
 
     - First Video Demo for Developers:
