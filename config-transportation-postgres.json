@@ -1,11 +1,616 @@
 {
   "$product": {
     "name": "API AutoFlow",
-    "version": "1.0.24"
+    "version": "1.0.26"
   },
+  "Data": [
+    {
+      "id": "cd052f41-d727-4c38-b68b-afc95b70e33c",
+      "meta": {},
+      "value": {
+        "name": "bus_route"
+      }
+    }
+  ],
+  "File": [
+    {
+      "id": "31182b67-a1bd-4d3e-ba76-aea0d00330e1",
+      "meta": {},
+      "value": {
+        "content-type": "application/json",
+        "name": "bus 1 position"
+      }
+    }
+  ],
+  "Flow": [
+    {
+      "id": "61464b4c-2e0c-40ef-940c-492770879c51",
+      "meta": {},
+      "value": {
+        "default-test": "3ac876be-00c5-4ab2-93fd-82c105cfdcd0",
+        "flow": [
+          {
+            "$action": "json/decode",
+            "json": {
+              "__LDATA__": [
+                "input"
+              ]
+            },
+            "output-location": {
+              "__LDATA__": [
+                "input"
+              ]
+            }
+          },
+          {
+            "$action": "organization/group",
+            "do": [
+              {
+                "$action": "string/to-float",
+                "output-location": {
+                  "__LDATA__": [
+                    "input",
+                    "lat"
+                  ]
+                },
+                "string": {
+                  "__LDATA__": [
+                    "input",
+                    "lat"
+                  ]
+                }
+              },
+              {
+                "$action": "string/to-float",
+                "output-location": {
+                  "__LDATA__": [
+                    "input",
+                    "long"
+                  ]
+                },
+                "string": {
+                  "__LDATA__": [
+                    "input",
+                    "long"
+                  ]
+                }
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "input",
+                    "lat"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "input",
+                    "lat"
+                  ]
+                },
+                "precision": 3
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "input",
+                    "long"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "input",
+                    "long"
+                  ]
+                },
+                "precision": 3
+              }
+            ],
+            "name": "rounding"
+          },
+          {
+            "$action": "organization/group",
+            "do": [
+              {
+                "$action": "data/expression",
+                "expression": "var1 - 0.005",
+                "name": "data/expression",
+                "output-location": {
+                  "__LDATA__": [
+                    "lat_min"
+                  ]
+                },
+                "variables": [
+                  {
+                    "name": "var1",
+                    "target": {
+                      "__LDATA__": [
+                        "input",
+                        "lat"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "$action": "data/expression",
+                "expression": "var1 + 0.005",
+                "output-location": {
+                  "__LDATA__": [
+                    "lat_max"
+                  ]
+                },
+                "variables": [
+                  {
+                    "name": "var1",
+                    "target": {
+                      "__LDATA__": [
+                        "input",
+                        "lat"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "$action": "data/expression",
+                "expression": "var1 - 0.005",
+                "name": "data/expression",
+                "output-location": {
+                  "__LDATA__": [
+                    "long_min"
+                  ]
+                },
+                "variables": [
+                  {
+                    "name": "var1",
+                    "target": {
+                      "__LDATA__": [
+                        "input",
+                        "long"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "$action": "data/expression",
+                "expression": "var1 + 0.005",
+                "output-location": {
+                  "__LDATA__": [
+                    "long_max"
+                  ]
+                },
+                "variables": [
+                  {
+                    "name": "var1",
+                    "target": {
+                      "__LDATA__": [
+                        "input",
+                        "long"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "lat_min"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "lat_min"
+                  ]
+                },
+                "precision": 3
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "lat_max"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "lat_max"
+                  ]
+                },
+                "precision": 3
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "long_min"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "long_min"
+                  ]
+                },
+                "precision": 3
+              },
+              {
+                "$action": "float/round",
+                "float": {
+                  "__LDATA__": [
+                    "long_max"
+                  ]
+                },
+                "output-location": {
+                  "__LDATA__": [
+                    "long_max"
+                  ]
+                },
+                "precision": 3
+              }
+            ],
+            "name": "prepare lat and long"
+          },
+          {
+            "$action": "json/encode",
+            "data": {
+              "lat_max": {
+                "__LDATA__": [
+                  "lat_max"
+                ]
+              },
+              "lat_min": {
+                "__LDATA__": [
+                  "lat_min"
+                ]
+              },
+              "lomg_max": {
+                "__LDATA__": [
+                  "long_max"
+                ]
+              },
+              "long_min": {
+                "__LDATA__": [
+                  "long_min"
+                ]
+              }
+            },
+            "output-location": {
+              "__LDATA__": [
+                "output"
+              ]
+            }
+          }
+        ],
+        "name": "rounding lat long"
+      }
+    },
+    {
+      "id": "f6ffe6bc-e473-4428-bc2f-3126118d128a",
+      "meta": {},
+      "value": {
+        "default-test": "b2b0c78b-8c30-4bf5-92c0-799a2917f576",
+        "flow": [
+          {
+            "$action": "conditional/switch",
+            "cases": [
+              {
+                "do": [
+                  {
+                    "$action": "json/decode",
+                    "json": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    },
+                    "output-location": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    }
+                  },
+                  {
+                    "$action": "string/join",
+                    "array": [
+                      "INSERT INTO public.\"buses\" (\"bus_name\") VALUES ('",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "bus_name"
+                        ]
+                      },
+                      "')"
+                    ],
+                    "output-location": {
+                      "__LDATA__": [
+                        "query"
+                      ]
+                    },
+                    "separator": ""
+                  }
+                ],
+                "name": "case1",
+                "value": "bus"
+              },
+              {
+                "do": [
+                  {
+                    "$action": "json/decode",
+                    "json": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    },
+                    "output-location": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    }
+                  },
+                  {
+                    "$action": "string/join",
+                    "array": [
+                      "INSERT INTO public.\"stations\" (\"station_name\",\"lat\",\"long\") VALUES ('",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "station_name"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "lat"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "long"
+                        ]
+                      },
+                      "')"
+                    ],
+                    "output-location": {
+                      "__LDATA__": [
+                        "query"
+                      ]
+                    },
+                    "separator": ""
+                  }
+                ],
+                "name": "case2",
+                "value": "station"
+              },
+              {
+                "do": [
+                  {
+                    "$action": "json/decode",
+                    "json": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    },
+                    "output-location": {
+                      "__LDATA__": [
+                        "input",
+                        "data"
+                      ]
+                    }
+                  },
+                  {
+                    "$action": "string/join",
+                    "array": [
+                      "INSERT INTO public.\"bus_position\" (\"bus_id\",\"lat\",\"long\",\"situation\",\"time\",\"last_visited_station\") VALUES ('",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "bus_id"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "lat"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "long"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "situation"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "time"
+                        ]
+                      },
+                      "','",
+                      {
+                        "__LDATA__": [
+                          "input",
+                          "data",
+                          "last_visited_station"
+                        ]
+                      },
+                      "')"
+                    ],
+                    "output-location": {
+                      "__LDATA__": [
+                        "query"
+                      ]
+                    },
+                    "separator": ""
+                  }
+                ],
+                "name": "case3",
+                "value": "bus_position"
+              }
+            ],
+            "default": [],
+            "name": "what you want to insert ?",
+            "target": {
+              "__LDATA__": [
+                "input",
+                "what"
+              ]
+            }
+          },
+          {
+            "$action": "database/postgres/query",
+            "address": "127.0.0.1",
+            "database": "transportation",
+            "format": "processed",
+            "mock-result": {
+              "columns": [
+                "column1",
+                "column2"
+              ],
+              "num_rows": 2,
+              "rows": [
+                [
+                  "col1_val1",
+                  "col2_val1"
+                ],
+                [
+                  "col1_val2",
+                  "col2_val2"
+                ]
+              ]
+            },
+            "output-location": {
+              "__LDATA__": [
+                "result"
+              ]
+            },
+            "password": "navid1234",
+            "port": 5432,
+            "query": {
+              "__LDATA__": [
+                "query"
+              ]
+            },
+            "use-mock-result": false,
+            "username": "postgres"
+          }
+        ],
+        "name": "insert to db"
+      }
+    },
+    {
+      "id": "c4a0056d-86b7-4b61-a843-05842725d01f",
+      "meta": {},
+      "value": {
+        "default-test": "e93677b6-a1c0-480b-b35f-9190c0a40e8c",
+        "flow": [
+          {
+            "$action": "array/chunk",
+            "array": [],
+            "count": 0,
+            "leftover": [],
+            "output-location": {
+              "__LDATA__": []
+            },
+            "step": 0
+          },
+          {
+            "$action": "array/drop-every",
+            "array": [],
+            "nth": 0,
+            "output-location": {
+              "__LDATA__": []
+            }
+          },
+          {
+            "$action": "array/is-member",
+            "array": [],
+            "element": "",
+            "output-location": {
+              "__LDATA__": []
+            }
+          }
+        ],
+        "name": "aaaaaa"
+      }
+    }
+  ],
+  "FlowTest": [
+    {
+      "id": "ad037a1a-eef9-4f81-8330-d5b26e95f082",
+      "meta": {
+        "index": [
+          "flow",
+          "61464b4c-2e0c-40ef-940c-492770879c51"
+        ]
+      },
+      "value": {
+        "input": "{\"lat\":\"76.672138\",\"long\":\"87.123697\"}",
+        "name": "default-test-input"
+      }
+    },
+    {
+      "id": "f86419fd-fbeb-4e97-a98b-df30cfcf9331",
+      "meta": {
+        "index": [
+          "flow",
+          "f6ffe6bc-e473-4428-bc2f-3126118d128a"
+        ]
+      },
+      "value": {
+        "input": {
+          "data": "{\"bus_id\":\"1\",\"lat\":\"10.1010\",\"long\":\"20.2020\",\"situation\":\"waiting 1\",\"time\":\"2021-66-77 12:00:12\",\"last_visited_station\":\"1\"}",
+          "what": "bus_position"
+        },
+        "name": "default-test-input"
+      }
+    },
+    {
+      "id": "e93677b6-a1c0-480b-b35f-9190c0a40e8c",
+      "meta": {
+        "index": [
+          "flow",
+          "c4a0056d-86b7-4b61-a843-05842725d01f"
+        ]
+      },
+      "value": {
+        "input": {},
+        "name": "default-test-input"
+      }
+    }
+  ],
   "Inbound": [
     {
-      "id": "a0ed087f-4c0e-4392-be15-d03998182b0c",
+      "id": "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
       "meta": {},
       "value": {
         "name": "transportation",
@@ -16,33 +621,15 @@
   ],
   "InboundEndpoint": [
     {
-      "id": "10167388-82e2-4e42-8a28-833503b76c87",
+      "id": "0aec5ebc-7690-4c14-8912-561dd24094cc",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": {
-        "default-test": "a8d41312-a878-4095-a7ec-5262a60cc3a7",
-        "methods": [
-          "GET"
-        ],
-        "name": "get stations",
-        "path": "/get-stations",
-        "type": "endpoint"
-      }
-    },
-    {
-      "id": "c7f4ae6c-a43b-42bf-ad84-0d40af4d0cb1",
-      "meta": {
-        "index": [
-          "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
-        ]
-      },
-      "value": {
-        "default-test": "86d3bb0f-e7cf-472e-b8df-4e27f18f3fec",
+        "default-test": "624617ad-6b1f-4bf1-b12a-c6d776f7e886",
         "methods": [
           "POST"
         ],
@@ -52,33 +639,69 @@
       }
     },
     {
-      "id": "62d4fb20-e6c1-41f8-aecc-09ba42c326ec",
+      "id": "8234bffd-98c0-4328-9633-e2fed3dfd833",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": {
-        "default-test": "9fa81954-998e-46e1-ae62-e52e822f118c",
+        "default-test": "d9df8b18-4a63-4a0c-9817-5ef59b13ad81",
         "methods": [
-          "GET"
+          "POST"
         ],
-        "name": "get buses",
-        "path": "/get-buses",
+        "name": "insert station",
+        "path": "/insert-station",
         "type": "endpoint"
       }
     },
     {
-      "id": "6e1a645c-8850-4b72-bc61-cc6245155369",
+      "id": "2a7e2abc-57b9-45c0-b91f-71ce972d2662",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": {
-        "default-test": "16a9ee1b-17f3-4601-b430-23316d312503",
+        "default-test": "2c04ef98-2934-4532-aa37-e3f8db8201d7",
+        "methods": [
+          "GET"
+        ],
+        "name": "get stations",
+        "path": "/get-stations",
+        "type": "endpoint"
+      }
+    },
+    {
+      "id": "9519e18c-0cf7-420e-bbc8-9865fd406d50",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
+        ]
+      },
+      "value": {
+        "default-test": "c0225930-0b5e-45a1-b591-cc018f5685a4",
+        "methods": [
+          "POST"
+        ],
+        "name": "insert bus position",
+        "path": "/insert-bus-position",
+        "type": "endpoint"
+      }
+    },
+    {
+      "id": "130691ec-08d8-46d5-810d-ffd3a63cffc0",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
+        ]
+      },
+      "value": {
+        "default-test": "1a679b68-13fd-492f-93a1-342415f19390",
         "methods": [
           "POST"
         ],
@@ -88,31 +711,316 @@
       }
     },
     {
-      "id": "61e8e5bf-52d3-42d0-847b-5ac14cdfd5ae",
+      "id": "ec15b844-bfcd-492b-9624-cf07a297519f",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": {
-        "default-test": "d622a8fc-7f3b-47c9-9988-100ed4b38abe",
+        "default-test": "638cd6bf-d9cb-45e4-b795-c52014d730de",
         "methods": [
-          "POST"
+          "GET"
         ],
-        "name": "insert station",
-        "path": "/insert-station",
+        "name": "get buses",
+        "path": "/get-buses",
         "type": "endpoint"
       }
     }
   ],
   "InboundEndpointFlow": [
     {
-      "id": "10167388-82e2-4e42-8a28-833503b76c87",
+      "id": "0aec5ebc-7690-4c14-8912-561dd24094cc",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
+        ]
+      },
+      "value": [
+        {
+          "$action": "organization/group",
+          "do": [
+            {
+              "$action": "json/decode",
+              "json": {
+                "__LDATA__": [
+                  "request",
+                  "body"
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "bus"
+                ]
+              }
+            },
+            {
+              "$action": "string/join",
+              "array": [
+                "SELECT station_id, sequence FROM public.\"bus_station\" WHERE bus_id = '",
+                {
+                  "__LDATA__": [
+                    "bus",
+                    "bus_id"
+                  ]
+                },
+                "' ORDER BY sequence DESC"
+              ],
+              "output-location": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "separator": ""
+            },
+            {
+              "$action": "database/postgres/query",
+              "address": "127.0.0.1",
+              "database": "transportation",
+              "format": "processed",
+              "mock-result": {
+                "columns": [
+                  "column1",
+                  "column2"
+                ],
+                "num_rows": 2,
+                "rows": [
+                  [
+                    "col1_val1",
+                    "col2_val1"
+                  ],
+                  [
+                    "col1_val2",
+                    "col2_val2"
+                  ]
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "password": "navid1234",
+              "port": 5432,
+              "query": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "use-mock-result": false,
+              "username": "postgres"
+            },
+            {
+              "$action": "data/set",
+              "at-location": {
+                "__LDATA__": [
+                  "correct-result"
+                ]
+              },
+              "value": []
+            }
+          ],
+          "name": "get data"
+        },
+        {
+          "$action": "iteration/for-each",
+          "array": {
+            "__LDATA__": [
+              "result"
+            ]
+          },
+          "do": [
+            {
+              "$action": "string/join",
+              "array": [
+                "SELECT station_name, lat, long FROM public.\"stations\" WHERE id = '",
+                {
+                  "__LDATA__": [
+                    "value",
+                    "station_id"
+                  ]
+                },
+                "'"
+              ],
+              "output-location": {
+                "__LDATA__": [
+                  "query-for-station-name"
+                ]
+              },
+              "separator": ""
+            },
+            {
+              "$action": "database/postgres/query",
+              "address": "127.0.0.1",
+              "database": "transportation",
+              "format": "processed",
+              "mock-result": {
+                "columns": [
+                  "column1",
+                  "column2"
+                ],
+                "num_rows": 2,
+                "rows": [
+                  [
+                    "col1_val1",
+                    "col2_val1"
+                  ],
+                  [
+                    "col1_val2",
+                    "col2_val2"
+                  ]
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "station"
+                ]
+              },
+              "password": "navid1234",
+              "port": 5432,
+              "query": {
+                "__LDATA__": [
+                  "query-for-station-name"
+                ]
+              },
+              "use-mock-result": false,
+              "username": "postgres"
+            },
+            {
+              "$action": "array/insert-at",
+              "array": {
+                "__LDATA__": [
+                  "correct-result"
+                ]
+              },
+              "index": 0,
+              "output-location": {
+                "__LDATA__": [
+                  "correct-result"
+                ]
+              },
+              "value": {
+                "lat": {
+                  "__LDATA__": [
+                    "station",
+                    0,
+                    "lat"
+                  ]
+                },
+                "long": {
+                  "__LDATA__": [
+                    "station",
+                    0,
+                    "long"
+                  ]
+                },
+                "sequence": {
+                  "__LDATA__": [
+                    "value",
+                    "sequence"
+                  ]
+                },
+                "station_id": {
+                  "__LDATA__": [
+                    "value",
+                    "station_id"
+                  ]
+                },
+                "station_name": {
+                  "__LDATA__": [
+                    "station",
+                    0,
+                    "station_name"
+                  ]
+                }
+              }
+            }
+          ],
+          "index-location": {
+            "__LDATA__": [
+              "index"
+            ]
+          },
+          "name": "iteration for geting the route",
+          "value-location": {
+            "__LDATA__": [
+              "value"
+            ]
+          }
+        },
+        {
+          "$action": "table/set-data",
+          "cache": 0,
+          "iterate": false,
+          "key": "bus_1",
+          "lifespan": null,
+          "mock-result": "ok",
+          "output-location": {
+            "__LDATA__": [
+              "result"
+            ]
+          },
+          "path": [],
+          "table-id": "cd052f41-d727-4c38-b68b-afc95b70e33c",
+          "use-mock-result": false,
+          "value": {
+            "__LDATA__": [
+              "correct-result"
+            ]
+          }
+        },
+        {
+          "$action": "data/set",
+          "at-location": {
+            "__LDATA__": [
+              "response",
+              "body"
+            ]
+          },
+          "value": {
+            "__LDATA__": [
+              "correct-result"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "8234bffd-98c0-4328-9633-e2fed3dfd833",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
+        ]
+      },
+      "value": [
+        {
+          "$action": "flow/call",
+          "flow-id": "f6ffe6bc-e473-4428-bc2f-3126118d128a",
+          "input": {
+            "data": {
+              "__LDATA__": [
+                "request",
+                "body"
+              ]
+            },
+            "what": "station"
+          },
+          "name": "insert to db",
+          "output-location": {
+            "__LDATA__": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "2a7e2abc-57b9-45c0-b91f-71ce972d2662",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": [
@@ -153,220 +1061,67 @@
       ]
     },
     {
-      "id": "c7f4ae6c-a43b-42bf-ad84-0d40af4d0cb1",
+      "id": "9519e18c-0cf7-420e-bbc8-9865fd406d50",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": [
         {
-          "$action": "json/decode",
-          "json": {
-            "__LDATA__": [
-              "request",
-              "body"
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "bus"
-            ]
-          }
-        },
-        {
-          "$action": "string/join",
-          "array": [
-            "SELECT station_id, sequence FROM public.\"bus_station\" WHERE bus_id = '",
-            {
+          "$action": "flow/call",
+          "flow-id": "f6ffe6bc-e473-4428-bc2f-3126118d128a",
+          "input": {
+            "data": {
               "__LDATA__": [
-                "bus",
-                "bus_id"
+                "request",
+                "body"
               ]
             },
-            "'"
-          ],
+            "what": "bus_position"
+          },
+          "name": "insert to db",
           "output-location": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "separator": ""
-        },
-        {
-          "$action": "database/postgres/query",
-          "address": "127.0.0.1",
-          "database": "transportation",
-          "format": "processed",
-          "mock-result": {
-            "columns": [
-              "column1",
-              "column2"
-            ],
-            "num_rows": 2,
-            "rows": [
-              [
-                "col1_val1",
-                "col2_val1"
-              ],
-              [
-                "col1_val2",
-                "col2_val2"
-              ]
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "result"
-            ]
-          },
-          "password": "navid1234",
-          "port": 5432,
-          "query": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "use-mock-result": false,
-          "username": "postgres"
-        },
-        {
-          "$action": "data/set",
-          "at-location": {
-            "__LDATA__": [
-              "final-result"
-            ]
-          },
-          "value": []
-        },
-        {
-          "$action": "iteration/for-each",
-          "array": {
-            "__LDATA__": [
-              "result"
-            ]
-          },
-          "do": [
-            {
-              "$action": "string/join",
-              "array": [
-                "SELECT station_name FROM public.\"stations\" WHERE id = '",
-                {
-                  "__LDATA__": [
-                    "value",
-                    "station_id"
-                  ]
-                },
-                "'"
-              ],
-              "output-location": {
-                "__LDATA__": [
-                  "station-query"
-                ]
-              },
-              "separator": ""
-            },
-            {
-              "$action": "database/postgres/query",
-              "address": "127.0.0.1",
-              "database": "transportation",
-              "format": "processed",
-              "mock-result": {
-                "columns": [
-                  "column1",
-                  "column2"
-                ],
-                "num_rows": 2,
-                "rows": [
-                  [
-                    "col1_val1",
-                    "col2_val1"
-                  ],
-                  [
-                    "col1_val2",
-                    "col2_val2"
-                  ]
-                ]
-              },
-              "output-location": {
-                "__LDATA__": [
-                  "station-name"
-                ]
-              },
-              "password": "navid1234",
-              "port": 5432,
-              "query": {
-                "__LDATA__": [
-                  "station-query"
-                ]
-              },
-              "use-mock-result": false,
-              "username": "postgres"
-            },
-            {
-              "$action": "array/insert-at",
-              "array": {
-                "__LDATA__": [
-                  "final-result"
-                ]
-              },
-              "index": 0,
-              "output-location": {
-                "__LDATA__": [
-                  "final-result"
-                ]
-              },
-              "value": {
-                "sequence": {
-                  "__LDATA__": [
-                    "value",
-                    "sequence"
-                  ]
-                },
-                "station-name": {
-                  "__LDATA__": [
-                    "station-name",
-                    0,
-                    "station_name"
-                  ]
-                }
-              }
-            }
-          ],
-          "index-location": {
-            "__LDATA__": [
-              "index"
-            ]
-          },
-          "value-location": {
-            "__LDATA__": [
-              "value"
-            ]
-          }
-        },
-        {
-          "$action": "array/sort",
-          "array": {
-            "__LDATA__": [
-              "final-result"
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "response",
-              "body"
-            ]
+            "__LDATA__": []
           }
         }
       ]
     },
     {
-      "id": "62d4fb20-e6c1-41f8-aecc-09ba42c326ec",
+      "id": "130691ec-08d8-46d5-810d-ffd3a63cffc0",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
+        ]
+      },
+      "value": [
+        {
+          "$action": "flow/call",
+          "flow-id": "f6ffe6bc-e473-4428-bc2f-3126118d128a",
+          "input": {
+            "data": {
+              "__LDATA__": [
+                "request",
+                "body"
+              ]
+            },
+            "what": "bus"
+          },
+          "name": "insert to db",
+          "output-location": {
+            "__LDATA__": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "ec15b844-bfcd-492b-9624-cf07a297519f",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8"
         ]
       },
       "value": [
@@ -405,199 +1160,23 @@
           "username": "postgres"
         }
       ]
-    },
-    {
-      "id": "6e1a645c-8850-4b72-bc61-cc6245155369",
-      "meta": {
-        "index": [
-          "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
-        ]
-      },
-      "value": [
-        {
-          "$action": "json/decode",
-          "json": {
-            "__LDATA__": [
-              "request",
-              "body"
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "bus"
-            ]
-          }
-        },
-        {
-          "$action": "string/join",
-          "array": [
-            "INSERT INTO public.\"buses\" (\"bus_name\") VALUES ('",
-            {
-              "__LDATA__": [
-                "bus",
-                "bus_name"
-              ]
-            },
-            "')"
-          ],
-          "output-location": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "separator": ""
-        },
-        {
-          "$action": "database/postgres/query",
-          "address": "127.0.0.1",
-          "database": "transportation",
-          "format": "processed",
-          "mock-result": {
-            "columns": [
-              "column1",
-              "column2"
-            ],
-            "num_rows": 2,
-            "rows": [
-              [
-                "col1_val1",
-                "col2_val1"
-              ],
-              [
-                "col1_val2",
-                "col2_val2"
-              ]
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "result"
-            ]
-          },
-          "password": "navid1234",
-          "port": 5432,
-          "query": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "use-mock-result": false,
-          "username": "postgres"
-        }
-      ]
-    },
-    {
-      "id": "61e8e5bf-52d3-42d0-847b-5ac14cdfd5ae",
-      "meta": {
-        "index": [
-          "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c"
-        ]
-      },
-      "value": [
-        {
-          "$action": "json/decode",
-          "json": {
-            "__LDATA__": [
-              "request",
-              "body"
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "station"
-            ]
-          }
-        },
-        {
-          "$action": "string/join",
-          "array": [
-            "INSERT INTO public.\"stations\" (\"station_name\",\"lat\",\"long\") VALUES ('",
-            {
-              "__LDATA__": [
-                "station",
-                "station_name"
-              ]
-            },
-            "','",
-            {
-              "__LDATA__": [
-                "station",
-                "lat"
-              ]
-            },
-            "','",
-            {
-              "__LDATA__": [
-                "station",
-                "long"
-              ]
-            },
-            "')"
-          ],
-          "output-location": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "separator": ""
-        },
-        {
-          "$action": "database/postgres/query",
-          "address": "127.0.0.1",
-          "database": "transportation",
-          "format": "processed",
-          "mock-result": {
-            "columns": [
-              "column1",
-              "column2"
-            ],
-            "num_rows": 2,
-            "rows": [
-              [
-                "col1_val1",
-                "col2_val1"
-              ],
-              [
-                "col1_val2",
-                "col2_val2"
-              ]
-            ]
-          },
-          "output-location": {
-            "__LDATA__": [
-              "result"
-            ]
-          },
-          "password": "navid1234",
-          "port": 5432,
-          "query": {
-            "__LDATA__": [
-              "query"
-            ]
-          },
-          "use-mock-result": false,
-          "username": "postgres"
-        }
-      ]
     }
   ],
   "InboundEndpointTest": [
     {
-      "id": "86d3bb0f-e7cf-472e-b8df-4e27f18f3fec",
+      "id": "624617ad-6b1f-4bf1-b12a-c6d776f7e886",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
           "endpoint",
-          "c7f4ae6c-a43b-42bf-ad84-0d40af4d0cb1"
+          "0aec5ebc-7690-4c14-8912-561dd24094cc"
         ]
       },
       "value": {
         "name": "default-test-input",
         "request": {
-          "body": "{\"bus_id\":\"1\",\"bus_name\":\"line 1 - 1\"}",
+          "body": "{\"bus_id\":\"1\"}",
           "header": {},
           "path": {},
           "query": {}
@@ -605,33 +1184,13 @@
       }
     },
     {
-      "id": "9fa81954-998e-46e1-ae62-e52e822f118c",
+      "id": "1a679b68-13fd-492f-93a1-342415f19390",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
           "endpoint",
-          "62d4fb20-e6c1-41f8-aecc-09ba42c326ec"
-        ]
-      },
-      "value": {
-        "name": "default-test-input",
-        "request": {
-          "body": "",
-          "header": {},
-          "path": {},
-          "query": {}
-        }
-      }
-    },
-    {
-      "id": "16a9ee1b-17f3-4601-b430-23316d312503",
-      "meta": {
-        "index": [
-          "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c",
-          "endpoint",
-          "6e1a645c-8850-4b72-bc61-cc6245155369"
+          "130691ec-08d8-46d5-810d-ffd3a63cffc0"
         ]
       },
       "value": {
@@ -645,13 +1204,53 @@
       }
     },
     {
-      "id": "d622a8fc-7f3b-47c9-9988-100ed4b38abe",
+      "id": "2c04ef98-2934-4532-aa37-e3f8db8201d7",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
           "endpoint",
-          "61e8e5bf-52d3-42d0-847b-5ac14cdfd5ae"
+          "2a7e2abc-57b9-45c0-b91f-71ce972d2662"
+        ]
+      },
+      "value": {
+        "name": "default-test-input",
+        "request": {
+          "body": "",
+          "header": {},
+          "path": {},
+          "query": {}
+        }
+      }
+    },
+    {
+      "id": "638cd6bf-d9cb-45e4-b795-c52014d730de",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
+          "endpoint",
+          "ec15b844-bfcd-492b-9624-cf07a297519f"
+        ]
+      },
+      "value": {
+        "name": "default-test-input",
+        "request": {
+          "body": "",
+          "header": {},
+          "path": {},
+          "query": {}
+        }
+      }
+    },
+    {
+      "id": "d9df8b18-4a63-4a0c-9817-5ef59b13ad81",
+      "meta": {
+        "index": [
+          "inbound",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
+          "endpoint",
+          "8234bffd-98c0-4328-9633-e2fed3dfd833"
         ]
       },
       "value": {
@@ -665,24 +1264,1469 @@
       }
     },
     {
-      "id": "a8d41312-a878-4095-a7ec-5262a60cc3a7",
+      "id": "c0225930-0b5e-45a1-b591-cc018f5685a4",
       "meta": {
         "index": [
           "inbound",
-          "a0ed087f-4c0e-4392-be15-d03998182b0c",
+          "52e98ccd-6fb7-466d-9e02-f77b42fcb4a8",
           "endpoint",
-          "10167388-82e2-4e42-8a28-833503b76c87"
+          "9519e18c-0cf7-420e-bbc8-9865fd406d50"
         ]
       },
       "value": {
         "name": "default-test-input",
         "request": {
-          "body": "",
+          "body": "{\"bus_id\":\"1\",\"lat\":\"10.1010\",\"long\":\"20.2020\",\"situation\":\"waiting 1\",\"time\":\"2021-66-77 12:00:12\",\"last_visited_station\":\"1\"}",
           "header": {},
           "path": {},
           "query": {}
         }
       }
+    }
+  ],
+  "Timer": [
+    {
+      "id": "53f895fa-6923-437f-8ef1-18d8c33e4230",
+      "meta": {},
+      "value": {
+        "error-cutoff": 0,
+        "interval": 60000,
+        "name": "update bus position",
+        "start-on-bootup": true
+      }
+    },
+    {
+      "id": "d9e3fb63-3658-4a45-a02a-f22eb58a0d17",
+      "meta": {},
+      "value": {
+        "error-cutoff": 0,
+        "interval": 86400000,
+        "name": "clean bus_position table",
+        "start-on-bootup": false
+      }
+    },
+    {
+      "id": "843c793e-1787-49c8-b552-e2501d05e5cf",
+      "meta": {},
+      "value": {
+        "error-cutoff": 0,
+        "interval": 600000,
+        "name": "check bus situation",
+        "start-on-bootup": false
+      }
+    },
+    {
+      "id": "0399cdb9-8487-46ee-956e-1fc858374ce8",
+      "meta": {},
+      "value": {
+        "error-cutoff": 0,
+        "interval": 60000,
+        "name": "new timer to do action A",
+        "start-on-bootup": true
+      }
+    }
+  ],
+  "TimerFlow": [
+    {
+      "id": "53f895fa-6923-437f-8ef1-18d8c33e4230",
+      "meta": {},
+      "value": [
+        {
+          "$action": "database/postgres/query",
+          "address": "127.0.0.1",
+          "database": "transportation",
+          "format": "processed",
+          "mock-result": {
+            "columns": [
+              "column1",
+              "column2"
+            ],
+            "num_rows": 2,
+            "rows": [
+              [
+                "col1_val1",
+                "col2_val1"
+              ],
+              [
+                "col1_val2",
+                "col2_val2"
+              ]
+            ]
+          },
+          "output-location": {
+            "__LDATA__": [
+              "bus_situation"
+            ]
+          },
+          "password": "navid1234",
+          "port": 5432,
+          "query": "SELECT id,bus_id, lat, long, situation, last_visited_station FROM public.\"bus_position\" WHERE bus_id = '1' ORDER BY id DESC LIMIT 1",
+          "use-mock-result": false,
+          "username": "postgres"
+        },
+        {
+          "$action": "conditional/if",
+          "else": [],
+          "expression": "",
+          "then": [],
+          "variables": []
+        },
+        {
+          "$action": "conditional/if",
+          "else": [
+            {
+              "$action": "string/slice",
+              "length": 8,
+              "name": "String Slice",
+              "output-location": {
+                "__LDATA__": [
+                  "waiting"
+                ]
+              },
+              "start": 8,
+              "string": {
+                "__LDATA__": [
+                  "bus_situation",
+                  0,
+                  "situation"
+                ]
+              }
+            },
+            {
+              "$action": "string/to-integer",
+              "name": "String To Interger",
+              "output-location": {
+                "__LDATA__": [
+                  "waiting"
+                ]
+              },
+              "string": {
+                "__LDATA__": [
+                  "waiting"
+                ]
+              }
+            },
+            {
+              "$action": "conditional/if",
+              "else": [
+                {
+                  "$action": "data/expression",
+                  "expression": "var1 + 1",
+                  "name": "increase one min",
+                  "output-location": {
+                    "__LDATA__": [
+                      "waiting"
+                    ]
+                  },
+                  "variables": [
+                    {
+                      "name": "var1",
+                      "target": {
+                        "__LDATA__": [
+                          "waiting"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "$action": "string/join",
+                  "array": [
+                    "UPDATE public.\"bus_position\" SET situation = 'waiting ",
+                    {
+                      "__LDATA__": [
+                        "waiting"
+                      ]
+                    },
+                    "' WHERE id = '",
+                    {
+                      "__LDATA__": [
+                        "bus_situation",
+                        0,
+                        "id"
+                      ]
+                    },
+                    "'"
+                  ],
+                  "name": "prepare query",
+                  "output-location": {
+                    "__LDATA__": [
+                      "query-to-update-waiting"
+                    ]
+                  },
+                  "separator": ""
+                },
+                {
+                  "$action": "database/postgres/query",
+                  "address": "127.0.0.1",
+                  "database": "transportation",
+                  "format": "processed",
+                  "mock-result": {
+                    "columns": [
+                      "column1",
+                      "column2"
+                    ],
+                    "num_rows": 2,
+                    "rows": [
+                      [
+                        "col1_val1",
+                        "col2_val1"
+                      ],
+                      [
+                        "col1_val2",
+                        "col2_val2"
+                      ]
+                    ]
+                  },
+                  "output-location": {
+                    "__LDATA__": [
+                      "result"
+                    ]
+                  },
+                  "password": "navid1234",
+                  "port": 5432,
+                  "query": {
+                    "__LDATA__": [
+                      "query-to-update-waiting"
+                    ]
+                  },
+                  "use-mock-result": false,
+                  "username": "postgres"
+                }
+              ],
+              "expression": "",
+              "name": "if waiting == 20 min",
+              "then": [
+                {
+                  "$action": "datetime/now",
+                  "output-location": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  },
+                  "time-unit": "second"
+                },
+                {
+                  "$action": "string/slice",
+                  "length": 19,
+                  "output-location": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  },
+                  "start": 0,
+                  "string": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  }
+                },
+                {
+                  "$action": "string/join",
+                  "array": [
+                    "INSERT INTO public.\"bus_position\" (\"bus_id\",\"lat\",\"long\",\"situation\",\"time\",\"last_visited_station\") VALUES ('",
+                    {
+                      "__LDATA__": [
+                        "bus_situation",
+                        0,
+                        "bus_id"
+                      ]
+                    },
+                    "','",
+                    {
+                      "__LDATA__": [
+                        "bus_situation",
+                        0,
+                        "lat"
+                      ]
+                    },
+                    "','",
+                    {
+                      "__LDATA__": [
+                        "bus_situation",
+                        0,
+                        "long"
+                      ]
+                    },
+                    "','moving','",
+                    {
+                      "__LDATA__": [
+                        "time"
+                      ]
+                    },
+                    "','1')"
+                  ],
+                  "output-location": {
+                    "__LDATA__": [
+                      "query-to-update-moving"
+                    ]
+                  },
+                  "separator": ""
+                },
+                {
+                  "$action": "database/postgres/query",
+                  "address": "127.0.0.1",
+                  "database": "transportation",
+                  "format": "processed",
+                  "mock-result": {
+                    "columns": [
+                      "column1",
+                      "column2"
+                    ],
+                    "num_rows": 2,
+                    "rows": [
+                      [
+                        "col1_val1",
+                        "col2_val1"
+                      ],
+                      [
+                        "col1_val2",
+                        "col2_val2"
+                      ]
+                    ]
+                  },
+                  "output-location": {
+                    "__LDATA__": [
+                      "result"
+                    ]
+                  },
+                  "password": "navid1234",
+                  "port": 5432,
+                  "query": {
+                    "__LDATA__": [
+                      "query-to-update-moving"
+                    ]
+                  },
+                  "use-mock-result": false,
+                  "username": "postgres"
+                },
+                {
+                  "$action": "communication/http-request",
+                  "body": "{\"text\":\"bus starts a new trip from station 1\"}",
+                  "header": {
+                    "Content-type": "application/json"
+                  },
+                  "method": "POST",
+                  "mock-result": {
+                    "body": "",
+                    "header": {},
+                    "status-code": 200
+                  },
+                  "output-location": {
+                    "__LDATA__": [
+                      "response",
+                      "body"
+                    ]
+                  },
+                  "query": {},
+                  "timeout": 5000,
+                  "url": "#######COMENT########        https://hooks.slack.com/services/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",
+                  "url-variables": {},
+                  "use-mock-result": false
+                }
+              ],
+              "variables": [
+                {
+                  "$condition": "number/is-equal",
+                  "name": "condition1",
+                  "target": {
+                    "__LDATA__": [
+                      "waiting"
+                    ]
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          ],
+          "expression": "",
+          "name": "if situation == moving",
+          "then": [
+            {
+              "$action": "organization/group",
+              "do": [
+                {
+                  "$action": "flow/call",
+                  "flow-id": "61464b4c-2e0c-40ef-940c-492770879c51",
+                  "input": "{\"lat\":\"40.785\",\"long\":\"-73.969\"}",
+                  "name": "rounding lat long",
+                  "output-location": {
+                    "__LDATA__": [
+                      "raw_data"
+                    ]
+                  }
+                },
+                {
+                  "$action": "json/decode",
+                  "json": {
+                    "__LDATA__": [
+                      "raw_data"
+                    ]
+                  },
+                  "output-location": {
+                    "__LDATA__": [
+                      "lat_long"
+                    ]
+                  }
+                },
+                {
+                  "$action": "data/set",
+                  "at-location": {
+                    "__LDATA__": [
+                      "in-station"
+                    ]
+                  },
+                  "name": "prepare in station",
+                  "value": {
+                    "station-name": "no"
+                  }
+                },
+                {
+                  "$action": "data/set",
+                  "at-location": {
+                    "__LDATA__": [
+                      "change-situation"
+                    ]
+                  },
+                  "name": "prepare change situation",
+                  "value": 0
+                },
+                {
+                  "$action": "organization/group",
+                  "do": [
+                    {
+                      "$action": "table/get-data",
+                      "default": "",
+                      "key": "bus_1",
+                      "mock-result": "",
+                      "output-location": {
+                        "__LDATA__": [
+                          "bus-route"
+                        ]
+                      },
+                      "path": [],
+                      "refresh-lifespan": false,
+                      "table-id": "cd052f41-d727-4c38-b68b-afc95b70e33c",
+                      "use-mock-result": false
+                    },
+                    {
+                      "$action": "json/decode",
+                      "json": {
+                        "__LDATA__": [
+                          "bus-route",
+                          "body"
+                        ]
+                      },
+                      "output-location": {
+                        "__LDATA__": [
+                          "bus-route"
+                        ]
+                      }
+                    }
+                  ],
+                  "name": "get route"
+                }
+              ],
+              "name": "prepare data"
+            },
+            {
+              "$action": "iteration/for-each",
+              "array": {
+                "__LDATA__": [
+                  "bus-route"
+                ]
+              },
+              "do": [
+                {
+                  "$action": "conditional/if",
+                  "else": [],
+                  "expression": "condition1 && condition2 && condition3 && condition4",
+                  "then": [
+                    {
+                      "$action": "data/set",
+                      "at-location": {
+                        "__LDATA__": [
+                          "in-station"
+                        ]
+                      },
+                      "value": {
+                        "sequence": {
+                          "__LDATA__": [
+                            "value",
+                            "sequence"
+                          ]
+                        },
+                        "station-name": {
+                          "__LDATA__": [
+                            "value",
+                            "station_name"
+                          ]
+                        },
+                        "station_id": {
+                          "__LDATA__": [
+                            "value",
+                            "station_id"
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "variables": [
+                    {
+                      "$condition": "number/is-less",
+                      "name": "condition1",
+                      "target": {
+                        "__LDATA__": [
+                          "value",
+                          "lat"
+                        ]
+                      },
+                      "value": {
+                        "__LDATA__": [
+                          "lat_long",
+                          "lat_max"
+                        ]
+                      }
+                    },
+                    {
+                      "$condition": "number/is-greater",
+                      "name": "condition2",
+                      "target": {
+                        "__LDATA__": [
+                          "value",
+                          "lat"
+                        ]
+                      },
+                      "value": {
+                        "__LDATA__": [
+                          "lat_long",
+                          "lat_min"
+                        ]
+                      }
+                    },
+                    {
+                      "$condition": "number/is-less",
+                      "name": "condition3",
+                      "target": {
+                        "__LDATA__": [
+                          "value",
+                          "long"
+                        ]
+                      },
+                      "value": {
+                        "__LDATA__": [
+                          "lat_long",
+                          "lomg_max"
+                        ]
+                      }
+                    },
+                    {
+                      "$condition": "number/is-greater",
+                      "name": "condition4",
+                      "target": {
+                        "__LDATA__": [
+                          "value",
+                          "long"
+                        ]
+                      },
+                      "value": {
+                        "__LDATA__": [
+                          "lat_long",
+                          "long_min"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "index-location": {
+                "__LDATA__": [
+                  "index"
+                ]
+              },
+              "name": "iteration for bus in station",
+              "value-location": {
+                "__LDATA__": [
+                  "value"
+                ]
+              }
+            },
+            {
+              "$action": "conditional/if",
+              "else": [
+                {
+                  "$action": "organization/group",
+                  "do": [
+                    {
+                      "$action": "conditional/if",
+                      "else": [],
+                      "expression": "",
+                      "name": "if string",
+                      "then": [
+                        {
+                          "$action": "string/to-integer",
+                          "name": "make integer",
+                          "output-location": {
+                            "__LDATA__": [
+                              "bus_situation",
+                              0,
+                              "last_visited_station"
+                            ]
+                          },
+                          "string": {
+                            "__LDATA__": [
+                              "bus_situation",
+                              0,
+                              "last_visited_station"
+                            ]
+                          }
+                        }
+                      ],
+                      "variables": [
+                        {
+                          "$condition": "type/is-string",
+                          "name": "condition1",
+                          "target": {
+                            "__LDATA__": [
+                              "bus_situation",
+                              0,
+                              "last_visited_station"
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "$action": "array/count",
+                      "array": {
+                        "__LDATA__": [
+                          "bus-route"
+                        ]
+                      },
+                      "name": "count route",
+                      "output-location": {
+                        "__LDATA__": [
+                          "count-route"
+                        ]
+                      }
+                    },
+                    {
+                      "$action": "data/expression",
+                      "expression": "var1 - 1",
+                      "name": "decrease count route",
+                      "output-location": {
+                        "__LDATA__": [
+                          "count-route"
+                        ]
+                      },
+                      "variables": [
+                        {
+                          "name": "var1",
+                          "target": {
+                            "__LDATA__": [
+                              "count-route"
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "$action": "array/at",
+                      "array": {
+                        "__LDATA__": [
+                          "bus-route"
+                        ]
+                      },
+                      "at": {
+                        "__LDATA__": [
+                          "count-route"
+                        ]
+                      },
+                      "name": "get last in sequence",
+                      "output-location": {
+                        "__LDATA__": [
+                          "last-station"
+                        ]
+                      }
+                    },
+                    {
+                      "$action": "array/at",
+                      "array": {
+                        "__LDATA__": [
+                          "bus-route"
+                        ]
+                      },
+                      "at": {
+                        "__LDATA__": [
+                          "in-station",
+                          "sequence"
+                        ]
+                      },
+                      "name": "get next in sequence",
+                      "output-location": {
+                        "__LDATA__": [
+                          "next-station"
+                        ]
+                      }
+                    },
+                    {
+                      "$action": "string/unescape",
+                      "output-location": {
+                        "__LDATA__": [
+                          "new-line"
+                        ]
+                      },
+                      "string": "\\n"
+                    },
+                    {
+                      "$action": "data/set",
+                      "at-location": {
+                        "__LDATA__": [
+                          "new-last-station"
+                        ]
+                      },
+                      "name": "prepare new last station",
+                      "value": {
+                        "__LDATA__": [
+                          "in-station",
+                          "station_id"
+                        ]
+                      }
+                    }
+                  ],
+                  "name": "prepare data"
+                },
+                {
+                  "$action": "conditional/if",
+                  "else": [
+                    {
+                      "$action": "string/join",
+                      "array": [
+                        "The bus 1 is in station  :   \"",
+                        {
+                          "__LDATA__": [
+                            "in-station",
+                            "station-name"
+                          ]
+                        },
+                        {
+                          "__LDATA__": [
+                            "new-line"
+                          ]
+                        },
+                        "and the next station is : ",
+                        {
+                          "__LDATA__": [
+                            "next-station",
+                            "station_name"
+                          ]
+                        }
+                      ],
+                      "output-location": {
+                        "__LDATA__": [
+                          "result"
+                        ]
+                      },
+                      "separator": ""
+                    }
+                  ],
+                  "expression": "",
+                  "name": "is going to waiting",
+                  "then": [
+                    {
+                      "$action": "data/set",
+                      "at-location": {
+                        "__LDATA__": [
+                          "change-situation"
+                        ]
+                      },
+                      "name": "change situation",
+                      "value": 1
+                    },
+                    {
+                      "$action": "string/join",
+                      "array": [
+                        "The bus 1 is in first station , named  :   \"",
+                        {
+                          "__LDATA__": [
+                            "in-station",
+                            "station-name"
+                          ]
+                        },
+                        {
+                          "__LDATA__": [
+                            "new-line"
+                          ]
+                        },
+                        "and the next station is : ",
+                        {
+                          "__LDATA__": [
+                            "next-station",
+                            "station_name"
+                          ]
+                        },
+                        {
+                          "__$afref__": "data",
+                          "path": [
+                            "new-line"
+                          ]
+                        },
+                        "but will waiting here for 20 minutes"
+                      ],
+                      "output-location": {
+                        "__LDATA__": [
+                          "result"
+                        ]
+                      },
+                      "separator": ""
+                    }
+                  ],
+                  "variables": [
+                    {
+                      "$condition": "number/is-equal",
+                      "name": "condition1",
+                      "target": {
+                        "__LDATA__": [
+                          "in-station",
+                          "sequence"
+                        ]
+                      },
+                      "value": 1
+                    },
+                    {
+                      "$condition": "number/is-equal",
+                      "name": "condition2",
+                      "target": {
+                        "__LDATA__": [
+                          "bus_situation",
+                          0,
+                          "last_visited_station"
+                        ]
+                      },
+                      "value": {
+                        "__LDATA__": [
+                          "last-station",
+                          "station_id"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "expression": "",
+              "name": "in station == no",
+              "then": [
+                {
+                  "$action": "data/set",
+                  "at-location": {
+                    "__LDATA__": [
+                      "result"
+                    ]
+                  },
+                  "value": "The bus 1 is not in a station"
+                },
+                {
+                  "$action": "data/set",
+                  "at-location": {
+                    "__LDATA__": [
+                      "new-last-station"
+                    ]
+                  },
+                  "name": "prepare new last station",
+                  "value": {
+                    "__LDATA__": [
+                      "bus_situation",
+                      0,
+                      "last_visited_station"
+                    ]
+                  }
+                }
+              ],
+              "variables": [
+                {
+                  "$condition": "string/is-equivalent",
+                  "name": "condition1",
+                  "target": {
+                    "__LDATA__": [
+                      "in-station",
+                      "station-name"
+                    ]
+                  },
+                  "value": "no"
+                }
+              ]
+            },
+            {
+              "$action": "organization/group",
+              "do": [
+                {
+                  "$action": "datetime/now",
+                  "output-location": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  },
+                  "time-unit": "second"
+                },
+                {
+                  "$action": "string/slice",
+                  "length": 19,
+                  "output-location": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  },
+                  "start": 0,
+                  "string": {
+                    "__LDATA__": [
+                      "time"
+                    ]
+                  }
+                },
+                {
+                  "$action": "conditional/if",
+                  "else": [
+                    {
+                      "$action": "json/encode",
+                      "data": {
+                        "bus_id": 1,
+                        "last_visited_station": {
+                          "__LDATA__": [
+                            "new-last-station"
+                          ]
+                        },
+                        "lat": {
+                          "__LDATA__": [
+                            "lat_long",
+                            "lat_min"
+                          ]
+                        },
+                        "long": {
+                          "__LDATA__": [
+                            "lat_long",
+                            "long_min"
+                          ]
+                        },
+                        "situation": "waiting 0",
+                        "time": {
+                          "__LDATA__": [
+                            "time"
+                          ]
+                        }
+                      },
+                      "name": "json/encode",
+                      "output-location": {
+                        "__LDATA__": [
+                          "data"
+                        ]
+                      }
+                    }
+                  ],
+                  "expression": "",
+                  "name": "situation should not change",
+                  "then": [
+                    {
+                      "$action": "json/encode",
+                      "data": {
+                        "bus_id": 1,
+                        "last_visited_station": {
+                          "__LDATA__": [
+                            "new-last-station"
+                          ]
+                        },
+                        "lat": {
+                          "__LDATA__": [
+                            "lat_long",
+                            "lat_min"
+                          ]
+                        },
+                        "long": {
+                          "__LDATA__": [
+                            "lat_long",
+                            "long_min"
+                          ]
+                        },
+                        "situation": "moving",
+                        "time": {
+                          "__LDATA__": [
+                            "time"
+                          ]
+                        }
+                      },
+                      "name": "json/encode",
+                      "output-location": {
+                        "__LDATA__": [
+                          "data"
+                        ]
+                      }
+                    }
+                  ],
+                  "variables": [
+                    {
+                      "$condition": "number/is-equal",
+                      "name": "condition1",
+                      "target": {
+                        "__LDATA__": [
+                          "change-situation"
+                        ]
+                      },
+                      "value": 0
+                    }
+                  ]
+                }
+              ],
+              "name": "prepare data"
+            },
+            {
+              "$action": "communication/http-request",
+              "body": {
+                "__LDATA__": [
+                  "data"
+                ]
+              },
+              "header": {},
+              "method": "POST",
+              "mock-result": {
+                "body": "",
+                "header": {},
+                "status-code": 200
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "query": {},
+              "timeout": 5000,
+              "url": "http://localhost:1001/insert-bus-position",
+              "url-variables": {},
+              "use-mock-result": false
+            }
+          ],
+          "variables": [
+            {
+              "$condition": "string/is-equivalent",
+              "name": "condition1",
+              "target": {
+                "__LDATA__": [
+                  "bus_situation",
+                  0,
+                  "situation"
+                ]
+              },
+              "value": "moving"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d9e3fb63-3658-4a45-a02a-f22eb58a0d17",
+      "meta": {},
+      "value": [
+        {
+          "$action": "organization/group",
+          "do": [
+            {
+              "$action": "string/join",
+              "array": [
+                "SELECT * FROM public.\"bus_position\" WHERE bus_id = '",
+                "1",
+                "' ORDER BY id DESC"
+              ],
+              "output-location": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "separator": ""
+            },
+            {
+              "$action": "database/postgres/query",
+              "address": "127.0.0.1",
+              "database": "transportation",
+              "format": "processed",
+              "mock-result": {
+                "columns": [
+                  "column1",
+                  "column2"
+                ],
+                "num_rows": 2,
+                "rows": [
+                  [
+                    "col1_val1",
+                    "col2_val1"
+                  ],
+                  [
+                    "col1_val2",
+                    "col2_val2"
+                  ]
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result",
+                  "positions_log_during_last_day"
+                ]
+              },
+              "password": "navid1234",
+              "port": 5432,
+              "query": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "use-mock-result": false,
+              "username": "postgres"
+            },
+            {
+              "$action": "array/count",
+              "array": {
+                "__LDATA__": [
+                  "result",
+                  "positions_log_during_last_day"
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result",
+                  "positions_count_during_last_day"
+                ]
+              }
+            }
+          ],
+          "name": "read data from database"
+        },
+        {
+          "$action": "organization/group",
+          "do": [
+            {
+              "$action": "datetime/now",
+              "output-location": {
+                "__LDATA__": [
+                  "result",
+                  "date_and_time"
+                ]
+              },
+              "time-unit": "second"
+            },
+            {
+              "$action": "data/set",
+              "at-location": {
+                "__LDATA__": [
+                  "result",
+                  "bus_id"
+                ]
+              },
+              "value": "1"
+            },
+            {
+              "$action": "data/set",
+              "at-location": {
+                "__LDATA__": [
+                  "result",
+                  "bus_name"
+                ]
+              },
+              "value": "line 1 - 1"
+            }
+          ],
+          "name": "prepare data"
+        },
+        {
+          "$action": "organization/group",
+          "do": [
+            {
+              "$action": "string/join",
+              "array": [
+                "/Users/navid/Downloads/my solutions/bus_",
+                {
+                  "__LDATA__": [
+                    "result",
+                    "bus_id"
+                  ]
+                },
+                "_",
+                {
+                  "__LDATA__": [
+                    "result",
+                    "date_and_time"
+                  ]
+                },
+                ".txt"
+              ],
+              "output-location": {
+                "__LDATA__": [
+                  "file_name"
+                ]
+              },
+              "separator": ""
+            },
+            {
+              "$action": "json/encode",
+              "data": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              }
+            },
+            {
+              "$action": "file/write",
+              "content": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "file": {
+                "__LDATA__": [
+                  "file_name"
+                ]
+              },
+              "mock-result": "success",
+              "status-output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "use-mock-result": false
+            },
+            {
+              "$action": "database/postgres/query",
+              "address": "127.0.0.1",
+              "database": "transportation",
+              "format": "processed",
+              "mock-result": {
+                "columns": [
+                  "column1",
+                  "column2"
+                ],
+                "num_rows": 2,
+                "rows": [
+                  [
+                    "col1_val1",
+                    "col2_val1"
+                  ],
+                  [
+                    "col1_val2",
+                    "col2_val2"
+                  ]
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "password": "navid1234",
+              "port": 5432,
+              "query": "####   COMENT ####     DELETE FROM public.\"bus_position\"",
+              "use-mock-result": false,
+              "username": "postgres"
+            }
+          ],
+          "name": "action"
+        }
+      ]
+    },
+    {
+      "id": "843c793e-1787-49c8-b552-e2501d05e5cf",
+      "meta": {},
+      "value": [
+        {
+          "$action": "organization/group",
+          "do": [
+            {
+              "$action": "string/join",
+              "array": [
+                "SELECT * FROM public.\"bus_position\" WHERE bus_id = '",
+                "1",
+                "' ORDER BY id DESC"
+              ],
+              "output-location": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "separator": ""
+            },
+            {
+              "$action": "database/postgres/query",
+              "address": "127.0.0.1",
+              "database": "transportation",
+              "format": "processed",
+              "mock-result": {
+                "columns": [
+                  "column1",
+                  "column2"
+                ],
+                "num_rows": 2,
+                "rows": [
+                  [
+                    "col1_val1",
+                    "col2_val1"
+                  ],
+                  [
+                    "col1_val2",
+                    "col2_val2"
+                  ]
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "password": "navid1234",
+              "port": 5432,
+              "query": {
+                "__LDATA__": [
+                  "query"
+                ]
+              },
+              "use-mock-result": false,
+              "username": "postgres"
+            },
+            {
+              "$action": "array/count",
+              "array": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "output-location": {
+                "__LDATA__": [
+                  "array-count"
+                ]
+              }
+            }
+          ],
+          "name": "prepare data"
+        },
+        {
+          "$action": "conditional/if",
+          "else": [],
+          "expression": "",
+          "name": "if records are more than 10",
+          "then": [
+            {
+              "$action": "array/at",
+              "array": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "at": 0,
+              "output-location": {
+                "__LDATA__": [
+                  "result0"
+                ]
+              }
+            },
+            {
+              "$action": "array/at",
+              "array": {
+                "__LDATA__": [
+                  "result"
+                ]
+              },
+              "at": 9,
+              "output-location": {
+                "__LDATA__": [
+                  "result9"
+                ]
+              }
+            },
+            {
+              "$action": "conditional/if",
+              "else": [],
+              "expression": "",
+              "name": "if waiting 10 minutes",
+              "then": [
+                {
+                  "$action": "communication/http-request",
+                  "body": "{\"text\":\"******    PROBLEM  === >>> The bus 1 is staying for 10 minutes in the same position\"}",
+                  "header": {
+                    "Content-type": "application/json"
+                  },
+                  "method": "POST",
+                  "mock-result": {
+                    "body": "",
+                    "header": {},
+                    "status-code": 200
+                  },
+                  "output-location": {
+                    "__LDATA__": [
+                      "response",
+                      "body"
+                    ]
+                  },
+                  "query": {},
+                  "timeout": 5000,
+                  "url": "####### COMENT #######     https://hooks.slack.com/services/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",
+                  "url-variables": {},
+                  "use-mock-result": false
+                }
+              ],
+              "variables": [
+                {
+                  "$condition": "number/is-equal",
+                  "name": "condition1",
+                  "target": {
+                    "__LDATA__": [
+                      "result0",
+                      "lat"
+                    ]
+                  },
+                  "value": {
+                    "__LDATA__": [
+                      "result9",
+                      "lat"
+                    ]
+                  }
+                },
+                {
+                  "$condition": "number/is-equal",
+                  "name": "condition2",
+                  "target": {
+                    "__LDATA__": [
+                      "result0",
+                      "long"
+                    ]
+                  },
+                  "value": {
+                    "__LDATA__": [
+                      "result9",
+                      "long"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "variables": [
+            {
+              "$condition": "number/is-greater",
+              "name": "condition1",
+              "target": {
+                "__LDATA__": [
+                  "array-count"
+                ]
+              },
+              "value": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0399cdb9-8487-46ee-956e-1fc858374ce8",
+      "meta": {},
+      "value": []
     }
   ]
 }
