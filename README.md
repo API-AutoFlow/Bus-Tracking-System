@@ -32,3 +32,13 @@ Summary
             - integration with Slack Webhook
  
             
+      - New features after "Third Video":
+            - EndPoint: /insert-bus-route : to insert/update bus route
+                request-body: bus_id & station_id[]
+            - EndPoint: /update-timers : turns timers on/off
+                request-body: {"update":"on/off","check":"on/off","clean":"on/off"}
+                                "update" = "update bus position"        timer
+                                "check"  = "check bus situation"        timer
+                                "clean"  = "clean bus_position table"   timer
+            - EndPoint: /simulate-position: this is a GET method to resieve different positions for bus_1
+                                            every GET request recieves different Lat&Long
