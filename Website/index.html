@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transportation</title>
+
+  <link rel="stylesheet" href="styles.css?v=1.0">
+
+  <!-- Richtext Editor related imports -->
+  <!-- jQuery is required -->
+  <script src="wysiwyg-editor-summernote/jquery.min.js"></script>
+  <!-- For <a href="https://www.jqueryscript.net/tags.php?/bootstrap 4/">Bootstrap 4</a> -->
+  <link rel="stylesheet" href="wysiwyg-editor-summernote/_dist/summernote-bs4.css" />
+  <script src="wysiwyg-editor-summernote/_dist/summernote-bs4.js"></script>
+
+  <!-- For Bootstrap 3 -->
+  <link rel="stylesheet" href="wysiwyg-editor-summernote/_dist/summernote.css" />
+  <script src="wysiwyg-editor-summernote/_dist/summernote.js"></script>
+
+  <!-- Without any framework -->
+  <link rel="stylesheet" href="wysiwyg-editor-summernote/_dist/summernote-lite.css" />
+  <script src="wysiwyg-editor-summernote/_dist/summernote-lite.js"></script>
+  <script src="wysiwyg-editor-summernote/_dist/lang/summernote-es-ES.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+  <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
+  <style>
+    #map{
+      height:600px;
+      width:100%;
+    }
+    #myDiv{
+      height: 600px;
+      width:100%;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <span class="title-h1">Transportation System </span><span>v0.1.0</span><span style="float:right">Powered by <b>API AutoFlow</b></span>
+      <span id="server-status-message"></span>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <div class="row m-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <ul class="nav nav-pills nav-justified">
+        <li><a href="javascript:rudrSwitchTab('tb_0', 'content_0');" id="tb_0" class="nav-item nav-link">  BUS  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_1', 'content_1');" id="tb_1" class="nav-item nav-link">  STATION  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_2', 'content_2');" id="tb_2" class="nav-item nav-link">  BUS ROUTE  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_3', 'content_3');" id="tb_3" class="nav-item nav-link">  TIMERS SETTING  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_4', 'content_4');" id="tb_4" class="nav-item nav-link active">  MAP  </a></li>
+      </ul>
+    </div>
+    <div class="col-1"></div>
+    <hr>
+  </div>
+  
+
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+
+  <!-- -----------------------------------    TAB  BUS    ---------------------------------- -->
+  <div id="content_0" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-4">
+        <div class="row">
+          <span class="steps-title m-2">To see the list of busses :</span>
+          <button class="btn btn-secondary" type="button" onclick="getBuses()">GET All BUSES</button>
+        </div>
+        <div class="row" id="bus_list"></div>
+        <hr><hr>
+      </div>
+      <div class="col-1"></div>
+      <div class="col-4">
+        <div class="card m-2">
+          <div class="card-body">
+            <span class="steps-title m-2">To insert new bus into the database</span><br>
+            <span class="steps-title m-2">please insert bus name:</span>
+            <input class="form-control m-2" id="bus_name" type="text" placeholder="bus name" required/>
+            <button class="btn btn-secondary" type="button" onclick="insertBus()">INSERT BUS</button>
+          </div>
+        </div>
+        <div class="row">
+          <div id="insert_result_bus" class="invisible" role="alert"></div>
+        </div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  STATION    ------------------------------ -->
+  <div id="content_1" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-4">
+        <div class="row">
+          <span class="steps-title m-2">To see the list of stations :</span>
+          <button class="btn btn-secondary" type="button" onclick="getStations('list')">GET All STATIONS</button>
+        </div>
+        <div class="row">
+          <div id="station_list"></div>
+        </div>
+        <hr><hr>
+      </div>
+      <div class="col-1"></div>
+      <div class="col-4">
+        <span class="steps-title m-2">To insert new station into the database, &emsp;</span><br>
+        <span class="steps-title m-2">please insert informations bellow :</span>
+        
+            <input class="form-control m-2" id="station_name" type="text" placeholder="station name" required/>
+            <input class="form-control m-2" id="station_lat" type="text" placeholder="station lat" required/>
+            <input class="form-control m-2" id="station_long" type="text" placeholder="station long" required/>
+        
+          <button class="btn btn-secondary" type="button" onclick="insertStation()">INSERT STATION</button>
+        
+        <div class="row">
+          <div id="insert_result_station" class="invisible" role="alert"></div>
+        </div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  BUS  ROUTE   ---------------------------- -->
+  <div id="content_2" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-4">
+        <div class="card m-2">
+          <div class="card-body">
+              <span class="steps-title m-2">To see the bus route, please write bus id here :</span>
+              <input class="form-control m-2" id="input" type="text" placeholder="bus_id" required/>
+              <button class="btn btn-secondary" type="button" onclick="getBusRoute()">GET BUS ROUTE</button>
+          </div>
+        </div>
+        <hr><hr>
+        <div class="row" id="bus_route_list"></div>
+      </div>
+      <div class="col-1"></div>
+      <div class="col-4">
+        <div class="card m-2">
+          <div class="card-body">
+              <span class="steps-title m-2">To create new route for the bus please provide information bellow:</span>
+              <input class="form-control m-2" id="input1" type="text" placeholder="bus_id" required/>
+              <input class="form-control m-2" id="input2" type="text" placeholder="station ids: for example 1,8,10,12,14" required/>
+              <button class="btn btn-secondary" type="button" onclick="insertBusRoute()">SET BUS ROUTE</button>
+          </div>
+        </div>
+        <div id="insert_result_route" class="invisible" role="alert"></div>
+        <hr><hr>
+        <div class="row">
+          <span class="steps-title m-2">To see the list of stations :</span>
+          <button class="btn btn-secondary" type="button" onclick="getStations2()">GET All STATIONS</button>
+        </div>
+        <div class="row">
+          <div id="station_list"></div>
+        </div>
+        <div id="station_list2"></div>
+        <hr><hr>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  Settings    ----------------------------- -->
+  <div id="content_3" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <div class="card m-2">
+          <div class="card-body">
+            <form>
+              <p>Update bus position timer: </p>
+              <input type="radio" name="update" value="on">On
+              <br>
+              <input type="radio" name="update" value="off" checked="checked">Off
+            
+              <br><br>  
+              <p>Check bus situation timer: </p>
+              <input type="radio" name="check" value="on">On
+              <br>
+              <input type="radio" name="check" value="off" checked="checked">Off
+            
+              <br><br>
+              <p>Clean bus_position table timer: </p>
+              <input type="radio" name="clean" value="on">On
+              <br>
+              <input type="radio" name="clean" value="off" checked="checked">Off
+            
+              <br><br>
+              <input class="btn btn-secondary" id="submit_settings" type="button" value="Submit">
+            </form>
+            <div id="insert_result_settings" class= "invisible" role="alert"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  MAP         ----------------------------- -->
+  <div id="content_4" class="tabcontent">
+    <div class="row">
+      <div class="col-2">
+        <button class="btn btn-secondary m-2" type="button" onclick="dropStations()">SHOW STATIONS</button>
+        <button class="btn btn-secondary m-2" type="button" onclick="clearStations()">HIDE  STATIONS</button>
+        <!-- <button class="btn btn-secondary m-2" type="button" onclick="doMarkersListener()">EXTRA</button> -->
+        <!-- <div id="extra" class="m-2">extra</div> -->
+            <input class="form-control m-2" id="station_name_map" type="text" placeholder="station name" required/>
+            <input class="form-control m-2" id="station_lat_map" type="text" placeholder="station lat" required/>
+            <input class="form-control m-2" id="station_long_map" type="text" placeholder="station long" required/>
+        
+          <button class="btn btn-secondary m-2" type="button" onclick="insertStationMap()">INSERT STATION</button>
+      </div>
+      <div class="col-8">
+        <div class="card m-2">
+          <title>MY Map</title>
+          <div id="map"></div>
+        </div>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-secondary m-2" type="button" onclick="busInterval()">SHOW THE BUS 1 ROUTE</button>
+        <button class="btn btn-secondary m-2" type="button" onclick="stopTheBus()">STOP  THE BUS 1 ROUTE</button>
+        <!-- <button class="btn btn-secondary m-2" type="button" onclick="insertRoute()">INSERT route</button> -->
+      </div>
+    </div>
+
+    <!-- <div id="my_route" class="m-2">my_route</div> -->
+  </div>
+
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtpkIH7XvZ71emTt0JpovrklFxEPzDEGA&callback=initMap&libraries=&v=weekly"
+  defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+</body>
+<script>
+
+  // function insertRoute(){
+  //   var text = "[";
+  //   for(let i=0;i<positions2.length;i++){
+  //     text += "{lat:" + Math.round(positions2[i].lat*10000) / 10000 +",lng:"+Math.round(positions2[i].lng*10000)/10000+"},";
+  //   }
+  //   text += "]";
+  //   document.getElementById('my_route').innerText = text;
+  // }
+          
+  var stations = [
+      // { lat: 40.785, lng: -73.969 },
+      // { lat: 40.748, lng: -73.989 },
+      // { lat: 40.753, lng: -73.924 },
+      // { lat: 40.778, lng: -73.905 },
+      // { lat: 40.797, lng: -73.935 },
+    ];
+  var stationsName = [
+    //'Central Park', 'Empire State', 'Museum', 'Ditmars', 'East Harlem'
+    //'<h1>Central Park</h1>', '<h1>Empire State</h1>', '<h1>Museum</h1>', '<h1>Ditmars</h1>', '<h1>East Harlem</h1>'
+  ];
+  var positions = [{lat:40.7847,lng:-73.9702},{lat:40.7812,lng:-73.9727},{lat:40.7768,lng:-73.9759},{lat:40.7743,lng:-73.9812},{lat:40.7706,lng:-73.9839},{lat:40.7658,lng:-73.9874},{lat:40.7614,lng:-73.9902},{lat:40.7565,lng:-73.9941},{lat:40.7525,lng:-73.9944},{lat:40.7478,lng:-73.99},{lat:40.7471,lng:-73.9817},{lat:40.7514,lng:-73.9762},{lat:40.7545,lng:-73.9717},{lat:40.7581,lng:-73.9686},{lat:40.7602,lng:-73.9648},{lat:40.7583,lng:-73.958},{lat:40.756,lng:-73.9526},{lat:40.7536,lng:-73.9473},{lat:40.7511,lng:-73.9409},{lat:40.7516,lng:-73.9334},{lat:40.7526,lng:-73.9252},{lat:40.7561,lng:-73.9182},{lat:40.759,lng:-73.9111},{lat:40.7629,lng:-73.9064},{lat:40.7675,lng:-73.9043},{lat:40.7721,lng:-73.9012},{lat:40.7765,lng:-73.9025},{lat:40.7782,lng:-73.9061},{lat:40.7802,lng:-73.9118},{lat:40.7788,lng:-73.9147},{lat:40.7763,lng:-73.9167},{lat:40.7739,lng:-73.92},{lat:40.7766,lng:-73.9244},{lat:40.7823,lng:-73.9287},{lat:40.7859,lng:-73.9301},{lat:40.7914,lng:-73.9253},{lat:40.7966,lng:-73.9206},{lat:40.7997,lng:-73.9261},{lat:40.802,lng:-73.932},{lat:40.7975,lng:-73.934},{lat:40.7947,lng:-73.9394},{lat:40.7961,lng:-73.9455},{lat:40.8016,lng:-73.9488},{lat:40.804,lng:-73.954},{lat:40.8018,lng:-73.9616},{lat:40.7981,lng:-73.9646},{lat:40.794,lng:-73.9666},{lat:40.7902,lng:-73.9693},{lat:40.7849,lng:-73.9687},];
+  // var positions2 =[];
+  var routeBus1 =[];
+  var i = 0;
+  let markersStations = [];
+  let markersPositions = [];
+  let infoWindows = [];
+  let map;
+  var myBusInterval;
+
+  function prepareInfoWindows(){
+    infoWindows =[];
+    for (let i = 0; i < stationsName.length; i++) {
+      infoWindows.push(
+        new google.maps.InfoWindow({
+          content: "<h6>"+stationsName[i]+"</h6>"
+        })
+      );
+    }
+  }
+
+  function initMap(){
+    var options = {zoom:13,center:{lat:40.775,lng:-73.938}}
+    
+    map = new google.maps.Map(document.getElementById('map'), options);
+
+    // google.maps.event.addListener(map, 'click', function(event){
+    //   var marker = new google.maps.Marker({
+    //     position:event.latLng,
+    //     map,
+    //     animation: google.maps.Animation.DROP,});
+    //   positions2.push(event.latLng.toJSON());
+    // });
+  }
+
+  function dropStations() {
+    clearStations();
+    getStations("map");
+    prepareInfoWindows();
+    let i;
+    for (i = 0; i < stations.length; i++) {
+      addStationsWithTimeout(stations[i], i * 300);
+    }
+    setTimeout(doMarkersListener, i*301);
+  }
+  function addStationsWithTimeout(position, timeout) {
+    window.setTimeout(() => {
+      markersStations.push(
+        new google.maps.Marker({
+          position: position,
+          map,
+          animation: google.maps.Animation.DROP,
+          icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        })
+      );
+    }, timeout);
+  }
+  function doMarkersListener(){
+    // document.getElementById('extra').innerText = "done done"
+    for (let i = 0; i < stations.length; i++){
+      markersStations[i].addListener('click', function(){
+          infoWindows[i].open(map, markersStations[i]);
+    });
+    }
+  }
+  function clearStations() {
+    for (let i = 0; i < markersStations.length; i++) {
+      markersStations[i].setMap(null);
+    }
+    markersStations = [];
+  }
+
+  function busInterval(){
+    myBusInterval = setInterval(showBusPositions2,1000);
+  }
+  function showBusPositions(){
+
+    if (i > positions.length){
+      i=0;
+      clearPositions();
+    }
+
+    markersPositions.push(new google.maps.Marker({
+            position: positions[i],
+            map,
+            animation: google.maps.Animation.DROP,
+        }));
+
+    i += 1;
+  }
+  function showBusPositions2(){
+    if (i > positions.length){
+      i=0;
+      for(let j =0; j<routeBus1.length;j++){
+        routeBus1[j].setMap(null);
+      }
+    }
+    var myPositions = [];
+    myPositions.push(positions[i]);
+    myPositions.push(positions[i+1]);
+    routeBus1.push(new google.maps.Polyline({
+          path: myPositions,
+          geodesic: true,
+          strokeColor: "#FF0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+      }));
+    
+      routeBus1[routeBus1.length-1].setMap(map);
+    
+    i += 1;
+  }
+  function clearPositions() {
+    for (let i = 0; i < markersPositions.length; i++) {
+      markersPositions[i].setMap(null);
+    }
+    markersPositions = [];
+  }
+  function stopTheBus(){
+    clearPositions();
+    clearInterval(myBusInterval);
+  }
+
+  function insertStationMap(){
+    document.getElementById("station_name").value = document.getElementById("station_name_map").value;
+    document.getElementById("station_lat").value = document.getElementById("station_lat_map").value;
+    document.getElementById("station_long").value = document.getElementById("station_long_map").value;
+    insertStation();
+    stationsName.push(document.getElementById("station_name_map").value);
+    var busLat = parseFloat(document.getElementById("station_lat_map").value);
+    var busLong = parseFloat(document.getElementById("station_long_map").value);
+    stations.push({ lat : busLat , lng : busLong });
+    dropNewStation();
+    setTimeout(setInfoNewStation,600);
+  }
+  function dropNewStation(){
+    window.setTimeout(() => {
+      markersStations.push(
+        new google.maps.Marker({
+          position: stations[stations.length-1],
+          map,
+          animation: google.maps.Animation.DROP,
+          icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        })
+      );
+    }, 500);
+    // document.getElementById('extra').innerText = markersStations.length;
+  }
+  function setInfoNewStation(){
+    infoWindows.push(
+        new google.maps.InfoWindow({
+          content: "<h6>"+stationsName[stationsName.length - 1]+"</h6>"
+        })
+      );
+    // document.getElementById('extra').innerText = stationsName[stationsName.length-1];
+    markersStations[markersStations.length-1].addListener('click',function(){
+        infoWindows[infoWindows.length-1].open(map,markersStations[markersStations.length-1])
+    });
+
+    document.getElementById("station_name_map").value = '';
+    document.getElementById("station_lat_map").value = '';
+    document.getElementById("station_long_map").value = '';
+  }
+
+  function initiateStationsForMap(stationsList){
+    stations = [];
+    stationsName = [];
+    for(let i =0;i<stationsList.length;i++){
+      var obj = {};
+      obj["lat"] = stationsList[i].lat;
+      obj["lng"] = stationsList[i].long;
+      stations.push(obj);
+      stationsName.push(stationsList[i].station_name);
+    }
+  }
+
+  /*************************************************************************************************/
+  /*************************************************************************************************/
+  /*************************************************************************************************/
+  /*************************************************************************************************/
+  /*************************************************************************************************/
+  // API Calls
+  const xhr = new XMLHttpRequest();
+  const submit_settings = document.querySelector('#submit_settings');
+  
+  /********************************  Update Settings                              */
+  submit_settings.onclick = function () {
+            var update = document.querySelectorAll('input[name="update"]');
+            var check = document.querySelectorAll('input[name="check"]');
+            var clean = document.querySelectorAll('input[name="clean"]');
+            let selectedUpdate;
+            for (const rb of update) {
+                if (rb.checked) {
+                    selectedUpdate = rb.value;
+                    break;
+                }
+            }
+            let selectedCheck;
+            for (const rb of check) {
+                if (rb.checked) {
+                    selectedCheck = rb.value;
+                    break;
+                }
+            }
+            let selectedClean;
+            for (const rb of clean) {
+                if (rb.checked) {
+                    selectedClean = rb.value;
+                    break;
+                }
+            }
+            // document.getElementById("submit_result").innerHTML 
+            //     = "{\"update\":\"" + selectedUpdate + 
+            //         "\",\"check\":\"" + selectedCheck + 
+            //         "\",\"clean\":\"" + selectedClean + "\"}";
+
+            xhr.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("insert_result_settings").innerHTML = "timers updated successfully";
+                document.getElementById("insert_result_settings").className = "alert alert-success";
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+            };
+            xhr.open("POST", "http://localhost:1001/update-timers", true);
+            xhr.send("{\"update\":\"" + selectedUpdate + 
+                    "\",\"check\":\"" + selectedCheck + 
+                    "\",\"clean\":\"" + selectedClean + "\"}");
+        };
+
+  /********************************  Insert  Bus                                  */
+  function insertBus() {
+    var busName = document.getElementById("bus_name").value;
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("insert_result_bus").innerHTML = "bus is inserted successfully";
+        document.getElementById("insert_result_bus").className = "alert alert-success";
+        document.getElementById("bus_name").value = '';
+                document.getElementById("server-status-message").innerHTML = '';
+                getBuses();
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+      };
+    xhr.open("POST", "http://localhost:1001/insert-bus", true);
+    xhr.send("{\"bus_name\":\"" + busName + "\"}");
+  }
+
+  /********************************  Insert  Station                              */
+  function insertStation() {
+    var stationName = document.getElementById("station_name").value;
+    var busLat = document.getElementById("station_lat").value;
+    var busLong = document.getElementById("station_long").value;
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("insert_result_station").innerHTML = "station is inserted successfully";
+          document.getElementById("insert_result_station").className = "alert alert-success";
+          document.getElementById("station_name").value = '';
+          document.getElementById("station_lat").value = '';
+          document.getElementById("station_long").value = '';
+                document.getElementById("server-status-message").innerHTML = '';
+                getStations('list');
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+      };
+    xhr.open("POST", "http://localhost:1001/insert-station", true);
+    xhr.send("{\"station_name\":\""+stationName+"\",\"lat\":\""+busLat+"\",\"long\":\""+busLong+"\"}");
+  }
+
+  /********************************  Insert  Bus Route                            */
+  function insertBusRoute() {
+    var busId = document.getElementById("input1").value;
+    var stationId = document.getElementById("input2").value;
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("insert_result_route").innerHTML = "bus route is inserted successfully";
+        document.getElementById("insert_result_route").className = "alert alert-success";
+        document.getElementById("server-status-message").innerHTML = '';
+        document.getElementById("input").value = document.getElementById("input1").value;
+        document.getElementById("input1").value = '';
+        document.getElementById("input2").value = '';
+        getBusRoute();
+      } else {
+          document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+      }
+      };
+    xhr.open("POST", "http://localhost:1001/insert-bus-route", true);
+    xhr.send("{\"bus_id\":\""+busId+"\",\"station_id\":\"["+stationId+"]\"}");
+  }
+
+
+  /****                              Header Tabs Toggle                               */
+  function rudrSwitchTab(rudr_tab_id, rudr_tab_content) {
+    var x = document.getElementsByClassName("tabcontent");
+    var i;
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = 'none';
+    }
+    document.getElementById(rudr_tab_content).style.display = 'block';
+    var x = document.getElementsByClassName("nav-item nav-link");
+    var i;
+    for (i = 0; i < x.length; i++) {
+      x[i].className = "nav-item nav-link";
+    }
+    document.getElementById(rudr_tab_id).className = 'nav-item nav-link active';
+    document.getElementById("server-status-message").innerHTML = '';
+    document.getElementById("insert_result_bus").className = "invisible";
+    document.getElementById("insert_result_station").className = "invisible";
+    document.getElementById("insert_result_route").className = "invisible";
+    document.getElementById("insert_result_settings").className = "invisible";
+  }
+
+
+  /******************************** Get Buses                                     */
+  function getBuses() {
+    document.getElementById("bus_list").innerHTML = '';
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        createBusList(JSON.parse(this.responseText));
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+    };
+    xhr.open("GET", "http://localhost:1001/get-buses", true);
+    xhr.send();
+  }
+  /****                              Create Bus List                              */
+  function createBusList(myList){
+    var i;
+    for(i=0;i<myList.length;i++){
+      let a = document.createElement('div');
+      a.className = "card m-1"
+      let b = document.createElement('div');
+      b.className = "card-body"
+      b.textContent = "bus name :" + myList[i].bus_name + 
+                      '\xa0\xa0\xa0and  bus_id :' + myList[i].id;
+      a.appendChild(b);
+      document.getElementById("bus_list").appendChild(a);
+    }
+  }
+
+  /********************************  Get Stations                                 */
+  function getStations(result_type) {
+    document.getElementById("station_list").innerHTML = '';
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if(result_type=="map"){
+            initiateStationsForMap(JSON.parse(this.responseText));
+        }else{
+            createStationList(JSON.parse(this.responseText));
+        }
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+    };
+    xhr.open("GET", "http://localhost:1001/get-stations", true);
+    xhr.send();
+  }
+  /****                              Create Station List                          */
+  function createStationList(myList){
+    var i;
+    for(i=0;i<myList.length;i++){
+      let a = document.createElement('div');
+      a.className = "card m-1"
+      let b = document.createElement('div');
+      b.className = "card-body"
+      b.innerText = "station name :" + myList[i].station_name + 
+                      '\xa0\xa0\xa0and  station_id :' + myList[i].id + 
+                      "\nlatitude : " + myList[i].lat +
+                      '\xa0 and  longitude : ' + myList[i].long;
+      a.appendChild(b);
+      document.getElementById("station_list").appendChild(a);
+    }
+  }
+
+  /********************************  Get Stations2                                */
+  function getStations2() {
+    document.getElementById("station_list2").innerHTML = '';
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        createStationList2(JSON.parse(this.responseText));
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+    };
+    xhr.open("GET", "http://localhost:1001/get-stations", true);
+    xhr.send();
+  }
+  /****                              Create Station2 List                         */
+  function createStationList2(myList){
+    var i;
+    for(i=0;i<myList.length;i++){
+      let a = document.createElement('div');
+      a.className = "card m-1"
+      let b = document.createElement('div');
+      b.className = "card-body"
+      b.innerText = "station name :" + myList[i].station_name + 
+                      '\xa0\xa0\xa0and  station_id :' + myList[i].id + 
+                      "\nlatitude : " + myList[i].lat +
+                      '\xa0 and  longitude : ' + myList[i].long;
+      a.appendChild(b);
+      document.getElementById("station_list2").appendChild(a);
+    }
+  }
+
+  /********************************  Get Bus Route                                */
+  function getBusRoute() {
+    document.getElementById("bus_route_list").innerHTML = '';
+    var busId = document.getElementById("input").value;
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        createBusRouteList(JSON.parse(this.responseText));
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+      };
+    xhr.open("POST", "http://localhost:1001/get-bus-route", true);
+    xhr.send("{\"bus_id\":\"" + busId + "\"}");
+  }
+  /****                              Create Bus Route List                        */
+  function createBusRouteList(myList){
+    var i;
+    for(i=0;i<myList.length;i++){
+      let a = document.createElement('div');
+      a.className = "card m-1"
+      let b = document.createElement('div');
+      b.className = "card-body"
+      b.innerText = 'sequence : ' + myList[i].sequence + 
+                    "\xa0\xa0\xa0  station name :" + myList[i].station_name + 
+                    "\nlatitude : " + myList[i].lat +
+                    '\xa0 and  longitude : ' + myList[i].long;
+      a.appendChild(b);
+      document.getElementById("bus_route_list").appendChild(a);
+    }
+  }
+
+
+</script>
+</html>
