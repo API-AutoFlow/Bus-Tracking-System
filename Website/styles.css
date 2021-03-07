@@ -1,0 +1,108 @@
+
+.title-h1{
+  display: inline-block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+#server-status-message{
+  display: inline-block;
+  margin-left: 25px;
+  color: red;
+}
+.pg-half{
+  width: 50%;
+  display: inline-block;
+}
+ul.no-bullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333333;
+}
+ul.no-bullets>li {
+  float: left;
+}
+ul.no-bullets>li>a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+ul.no-bullets>li>a {
+  background-color: #111111;
+}
+ul.no-bullets>li>a.active {
+  font-weight: bold;
+}
+.sub-title {
+  font-weight: bold;
+  margin: 10px 0 20px;
+  text-decoration: underline;
+}
+.steps-title {
+  font-weight: bold;
+}
+#file-input {
+  margin: 10px 20px 5px 0;
+  min-width: 400px;
+}
+.buttons {
+  margin: 10px 20px 15px 0;
+  /* display: inline-block;
+  width: 100% */
+}
+.status-message {
+  margin-bottom: 15px;
+  height: 20px;
+}
+.form-wrapper,
+.page-content {
+  width: 50%;
+  float: left;
+}
+label, .email-title {
+  width: 125px;
+  display: inline-block;
+  vertical-align: top;
+}
+input, select {
+  margin: 0 10px 10px 0;
+  min-width: 400px;
+}
+#email-content-value{
+  margin: 20px 10px;
+  border: 1px solid Black;
+  display: inline-block;
+  width: 95%;
+  padding: 10px 25px 30px;
+}
+.input-explanation-notes {
+  margin-left: 130px;
+}
+textarea, .note-editor.note-frame {
+  margin: 25px 0;
+}
+.smtp-setting-instruction {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+}
+
+.smtp-setting-instruction td, .smtp-setting-instruction th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+.smtp-setting-instruction tr:nth-child(even){background-color: #f2f2f2;}
+.smtp-setting-instruction tr:hover {background-color: #ddd;}
+.smtp-setting-instruction th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
