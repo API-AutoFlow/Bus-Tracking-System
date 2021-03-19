@@ -448,7 +448,7 @@
                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
               }
             };
-            xhr.open("POST", "http://129.146.123.245:2099/update-timers", true);
+            xhr.open("POST", "https://129.146.123.245:2099/update-timers", true);
             xhr.send("{\"update\":\"" + selectedUpdate + 
                     "\",\"check\":\"" + selectedCheck + 
                     "\",\"clean\":\"" + selectedClean + "\"}");
@@ -468,7 +468,7 @@
                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
               }
       };
-    xhr.open("POST", "http://129.146.123.245:2099/insert-bus", true);
+    xhr.open("POST", "https://129.146.123.245:2099/insert-bus", true);
     xhr.send("{\"bus_name\":\"" + busName + "\"}");
   }
 
@@ -490,7 +490,7 @@
                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
               }
       };
-    xhr.open("POST", "http://129.146.123.245:2099/insert-station", true);
+    xhr.open("POST", "https://129.146.123.245:2099/insert-station", true);
     xhr.send("{\"station_name\":\""+stationName+"\",\"lat\":\""+busLat+"\",\"long\":\""+busLong+"\"}");
   }
 
@@ -511,7 +511,7 @@
           document.getElementById("server-status-message").innerHTML = serverStatusMessage;
       }
       };
-    xhr.open("POST", "http://129.146.123.245:2099/insert-bus-route", true);
+    xhr.open("POST", "https://129.146.123.245:2099/insert-bus-route", true);
     xhr.send("{\"bus_id\":\""+busId+"\",\"station_id\":\"["+stationId+"]\"}");
   }
 
@@ -549,7 +549,7 @@
                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
               }
     };
-    xhr.open("GET", "http://129.146.123.245:2099/get-buses", true);
+    xhr.open("GET", "https://129.146.123.245:2099/get-buses", true);
     xhr.send();
   }
   /****                              Create Bus List                              */
@@ -645,7 +645,7 @@
                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
               }
       };
-    xhr.open("POST", "http://129.146.123.245:2099/get-bus-route", true);
+    xhr.open("POST", "https://129.146.123.245:2099/get-bus-route", true);
     xhr.send("{\"bus_id\":\"" + busId + "\"}");
   }
   /****                              Create Bus Route List                        */
