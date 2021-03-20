@@ -583,6 +583,8 @@
               }
     };
     xhr.open("GET", "http://129.146.123.245:2099/get-stations", true);
+    xhr.withCredentials = true;
+    xhr.onreadystatechange = handler;
     xhr.send();
   }
   /****                              Create Station List                          */
