@@ -582,8 +582,8 @@
 //                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
 //               }
 //     };
-    xhr.open("GET", "https://129.146.123.245:2099/get-stations", true);
-//     xhr.withCredentials = true;
+    xhr.open("GET", "http://129.146.123.245:2099/get-stations", true);
+    xhr.withCredentials = true;
 //     xhr.onreadystatechange = handler;
     xhr.send();
     xhr.onreadystatechange = (e) => {
