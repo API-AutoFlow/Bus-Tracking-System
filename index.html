@@ -570,30 +570,30 @@
   /********************************  Get Stations                                 */
   function getStations(result_type) {
     document.getElementById("station_list").innerHTML = '';
-//     xhr.onreadystatechange = function() {
-//       if (this.readyState == 4 && this.status == 200) {
-//         if(result_type=="map"){
-//             initiateStationsForMap(JSON.parse(this.responseText));
-//         }else{
-//             createStationList(JSON.parse(this.responseText));
-//         }
-//                 document.getElementById("server-status-message").innerHTML = '';
-//               } else {
-//                 document.getElementById("server-status-message").innerHTML = serverStatusMessage;
-//               }
-//     };
-    xhr.open("GET", "https://129.146.123.245:2000/get-stations", true);
-//   xhr.withCredentials = true;
-//     xhr.onreadystatechange = handler;
-    xhr.send();
-    xhr.onreadystatechange = (e) => {
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
         if(result_type=="map"){
             initiateStationsForMap(JSON.parse(this.responseText));
         }else{
             createStationList(JSON.parse(this.responseText));
         }
-        document.getElementById("server-status-message").innerHTML = '';
-    }
+                document.getElementById("server-status-message").innerHTML = '';
+              } else {
+                document.getElementById("server-status-message").innerHTML = serverStatusMessage;
+              }
+    };
+    xhr.open("GET", "https://129.146.123.245:2000/get-stations", true);
+//   xhr.withCredentials = true;
+//     xhr.onreadystatechange = handler;
+    xhr.send();
+//     xhr.onreadystatechange = (e) => {
+//         if(result_type=="map"){
+//             initiateStationsForMap(JSON.parse(this.responseText));
+//         }else{
+//             createStationList(JSON.parse(this.responseText));
+//         }
+//         document.getElementById("server-status-message").innerHTML = '';
+//     }
   }
   /****                              Create Station List                          */
   function createStationList(myList){
